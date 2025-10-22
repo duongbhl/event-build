@@ -1,0 +1,35 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+
+/* ...existing code... */
+
+/* slide-in from right to left */
+.slide-in-right {
+  transform: translateX(30px);
+  opacity: 0;
+  animation: slideInFromRight 3s cubic-bezier(.22,.9,.36,1) forwards;
+}
+
+/* allow staggering via inline style animationDelay */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .slide-in-right {
+    transform: none;
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* ...existing code... */
