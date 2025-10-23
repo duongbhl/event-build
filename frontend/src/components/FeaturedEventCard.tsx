@@ -14,7 +14,7 @@ const FeaturedEventCard: React.FC<EventCardProps> = ({ _id, title, date, locatio
         });
     };
     return (
-        <div className="bg-white/40 backdrop-blur-md border border-white/20 shadow-md rounded-2xl p-8 mb-10 mx-auto max-w-3xl text-left">
+        <div className="bg-white/40 backdrop-blur-md border border-white/20 shadow-md rounded-2xl p-8 mb-10 mx-auto max-w-3xl text-left ">
             <h2 className="text-2xl font-bold text-slate-800 mb-1">
                 Featured Event
             </h2>

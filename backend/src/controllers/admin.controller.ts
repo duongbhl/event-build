@@ -2,7 +2,7 @@ import Event from '../models/event.model';
 import { Request, Response } from "express";
 
 
-// Lấy tất cả event đang chờ duyệt
+// Lấy tất cả event (cả duyệt và chưa duyệt)
 export const getAllEvents = async (req: Request, res: Response) => {
   try {
     const events = await Event.find();

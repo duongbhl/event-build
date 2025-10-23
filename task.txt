@@ -1,14 +1,6 @@
-admin:
-   fetch data
-   search data
-   pagination
-   accept
-   reject
 
 user:
-   homepage: fetch search pagination
-   explore:  search pagination
-   myevent:  search pagination filter(all,pending,approved) 
+   homepage: pagination
+   myevent:  filter(all,pending,approved) 
    dashboard: fetch
    analytics: fetch filter(revenue, attendees, satisfication)
-   view detail:register

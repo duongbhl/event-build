@@ -11,8 +11,10 @@ const UpcomingEventCard: React.FC<EventCardProps> = ({
   date,
   location,
   expectedAttendees,
+  attendees,
   price,
   description,
+  status,
   source
 }) => {
   const navigate = useNavigate();
@@ -20,11 +22,11 @@ const UpcomingEventCard: React.FC<EventCardProps> = ({
   const handleViewDetails = (eventId: number, source: string) => {
     if (source === "admin") {
       navigate(`/admin/ViewDetails/${eventId}`, {
-        state: { _id,title, date, location, expectedAttendees, description, price, source },
+        state: { _id,title, date, location, expectedAttendees,attendees, description, price,status, source, },
       });
     }
     else navigate(`/ViewDetails/${eventId}`, {
-      state: { _id,title, date, location, expectedAttendees, description, price, source },
+      state: { _id,title, date, location, expectedAttendees,attendees, description, price,status, source, },
     });
   };
 

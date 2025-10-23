@@ -1,12 +1,14 @@
 import { Button } from '@/components/ui/button'
-import { Check, DollarSign, TicketX, Users } from 'lucide-react';
+import axios from 'axios';
+import { BookOpen, Calendar, Check, CheckCircle, DollarSign, MapPin, TicketX, User, Users, X } from 'lucide-react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 
 const ViewDetails = () => {
 
   //truyen tu Upcoming... vao day
-  const { _id,title, date, expectedAttendees, location, description, price, source } = useLocation().state || {};
+  const { _id, title, date, expectedAttendees, attendees, location, description, price, status, source } = useLocation().state || {};
 
   const navigate = useNavigate();
   const eventDate = new Date(date);
@@ -14,10 +16,61 @@ const ViewDetails = () => {
   const diffTime = eventDate.getTime() - now.getTime(); // miliseconds
   const remainingDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // quy đổi ra ngày
 
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+
+  const acceptEvent = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setMessage(null)
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      const res = await axios.put(`http://localhost:5000/api/admin/approve-event/${_id}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      })
+
+      if (res.status === 200) setMessage(res.data.message);
+      else setError(res.data.message)
+    } catch (error) {
+      console.log(error);
+      setError("Failed Accept");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const rejectEvent = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setMessage(null)
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      const res = await axios.put(`http://localhost:5000/api/admin/reject-event/${_id}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      })
+
+      if (res.status === 200) setMessage(res.data.message);
+      else setError(res.data.message)
+    } catch (error) {
+      console.log(error);
+      setError("Failed Reject");
+    } finally {
+      setLoading(false);
+    }
+  }
+
 
   //Truyen tu day vao BuyTicket
-  const buyTicket = (_id:string)=>{
-    navigate(`/BuyTicket/${_id}`,{state:{title,_id}});
+  const buyTicket = (_id: string) => {
+    navigate(`/BuyTicket/${_id}`, { state: { title, _id } });
   }
 
   return (
@@ -56,34 +109,62 @@ const ViewDetails = () => {
           {/* Event Info */}
           <div className="bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-2xl p-6 w-[600px] shadow-xl">
             {/* <h3 className="font-bold text-xl mb-2">{title}</h3> */}
-            <p className="text-sm opacity-80">📅 {date}</p>
-            <p className="text-sm opacity-80">📍 {location}</p>
-            <p className="text-sm opacity-80">
-              <Users size={14} className="inline-block mr-1" /> {expectedAttendees} Attending
+            <p className="text-lg opacity-80 font-bold"><Calendar size={20} className="inline-block mr-1" /> {new Date(date).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}</p>
+            <p className="text-lg opacity-80 font-bold"><MapPin size={20} className="inline-block mr-1" /> {location}</p>
+            <p className="text-lg opacity-80 font-bold">
+              <TicketX size={20} className="inline-block mr-1" /> {expectedAttendees} Tickets
             </p>
-            <p className="text-sm opacity-80">
-              <DollarSign size={14} className="inline-block mr-1" /> {price} $ / 1 ticket
+            <p className="text-lg opacity-80 font-bold">
+              <User size={20} className="inline-block mr-1" /> {price} $ / 1 ticket
             </p>
-            <p className="text-sm mt-2">
-              {description}
+            <p className="text-lg opacity-80 font-bold">
+              <BookOpen size={20} className="inline-block mr-2" />{description}
             </p>
 
-            {source === "explore" || source === "homepage" ? (<>
-              <Button className="mt-4 w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 rounded-xl transition cursor-pointer" onClick={()=>buyTicket(_id)}>
+            {source === "explore" || source === "homepage" ? (
+              <Button className="mt-4 w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 rounded-xl transition cursor-pointer" onClick={() => buyTicket(_id)}>
                 Buy Ticket
               </Button>
-            </>) : source === "myEvents" ? (
+            ) : source === "myEvents" ? (
               <>
-                <Button className="mt-4 w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 rounded-xl transition cursor-pointer">
-                  Register for Event
-                </Button>
+
+                {status === "approved" ? (
+                  <>
+
+                    <p className="text-lg opacity-80 font-bold">
+                      <TicketX size={20} className="inline-block mr-1" /> {attendees} Attending
+                    </p>
+                    <p className="text-lg opacity-80 font-bold">
+                      <User size={20} className="inline-block mr-1" /> {price * attendees} Revenue
+                    </p>
+                    <span className="text-lg opacity-80 font-bold flex items-center align-middle text-green-300 mt-5 justify-center">
+                      <CheckCircle /> Status: {String(status)}
+                    </span>
+                  </>
+                ) : status === "rejected" ? (
+                  <>
+                    <span className="text-lg opacity-80 font-bold flex text-red-500 items-center gap-4">
+                      <X /> Status: {String(status)}
+                    </span>
+                  </>
+                ) : (
+                  <p className="text-sm opacity-80">Status: {String(status)}</p>
+                )}
+
               </>
             ) : source === "admin" ? (
-              <>
-                <div className="flex justify-center gap-6">
-                  <Button
-                    className="flex items-center gap-2 px-5 py-3 bg-green-500 backdrop-blur-md border border-white/20 text-slate-800 font-medium rounded-xl shadow-sm hover:bg-green-600 transition cursor-pointer"
+              status === "pending" ? (
 
+                <div className="flex justify-center gap-6">
+                  {/* Messages */}
+                  {error && <p className="text-red-400 text-sm text-center font-bold">{error}</p>}
+                  {message && <p className="text-green-400 text-sm text-center font-bold">{message}</p>}
+                  <Button
+                    className="flex items-center gap-2 px-5 py-3 bg-green-500 backdrop-blur-md border border-white/20 text-slate-800 font-medium rounded-xl shadow-sm hover:bg-green-600 transition cursor-pointer" onClick={acceptEvent}
                   >
                     <span role="img" aria-label="explore">
                       <Check />
@@ -93,7 +174,7 @@ const ViewDetails = () => {
 
                   <Button
                     className="flex items-center gap-2 px-5 py-3 bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl shadow-sm transition cursor-pointer "
-
+                    onClick={rejectEvent}
                   >
                     <span role="img" aria-label="create">
                       <TicketX />
@@ -101,9 +182,12 @@ const ViewDetails = () => {
                     <p className='text-amber-50'>Reject</p>
                   </Button>
                 </div>
-
-              </>
-            ) : source}
+              ) : (
+                <p className="text-sm opacity-80">Status: {String(status)}</p>
+              )
+            ) : (
+              <p className="text-sm opacity-80">{source}</p>
+            )}
           </div>
 
           {/* Chat Box */}
