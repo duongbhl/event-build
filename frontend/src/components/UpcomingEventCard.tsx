@@ -31,7 +31,7 @@ const UpcomingEventCard: React.FC<EventCardProps> = ({
   };
 
   return (
-    <div className="rounded-2xl overflow-hidden shadow-xl backdrop-blur-lg border border-blue-200 bg-blue-400/50 hover:bg-blue-400/70 transition duration-300 slide-in-right">
+    <div className="rounded-2xl w-50 overflow-hidden shadow-xl backdrop-blur-lg border border-blue-200 bg-blue-400/50 hover:bg-blue-400/70 transition duration-300 slide-in-right">
       <div className="p-5 text-white">
         <h3 className="text-lg font-semibold drop-shadow-sm">{title}</h3>
         <p className="flex items-center gap-2 text-sm mt-1 opacity-90">

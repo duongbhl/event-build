@@ -1,6 +1,6 @@
 
 user:
-   homepage: pagination
-   myevent:  filter(all,pending,approved) 
    dashboard: fetch
    analytics: fetch filter(revenue, attendees, satisfication)
+   myevent:  filter(all,pending,approved) 
+   

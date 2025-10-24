@@ -7,6 +7,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { ChevronLeft, ChevronRight } from "lucide-react"; // dùng icon đẹp hơn
 
+
 export default function HomePage() {
   const [isLogin, setIsLogin] = useState(false);
   const [eventList, setEvents] = useState<EventCardProps[]>([]);
@@ -106,7 +107,7 @@ export default function HomePage() {
                 {/* Nút trái */}
                 <button
                   onClick={() => carouselRef.current?.previous()}
-                  className="absolute left-0 bg-gray-800/70 hover:bg-gray-800 text-white p-2 rounded-full z-10 cursor-pointer"
+                  className="absolute left-0 bg-gray-800/70 hover:bg-gray-800 text-white p-2 rounded-full z-10 cursor-pointer ml-30"
                 >
                   <ChevronLeft size={24} />
                 </button>
@@ -122,11 +123,11 @@ export default function HomePage() {
                   draggable
                   swipeable
                   pauseOnHover
-                  containerClass="carousel-container mb-8 slide-in-right"
-                  itemClass="flex justify-center"
+                  containerClass="carousel-container mb-8"
+                  itemClass="w-full flex justify-center"
                 >
                   {filteredEvents.map((event) => (
-                    <div key={event._id} className="flex justify-center">
+                    <div key={event._id} className="flex justify-center w-full mt-20">
                       <FeaturedEventCard
                         _id={event._id}
                         title={event.title}
@@ -146,7 +147,7 @@ export default function HomePage() {
                 {/* Nút phải */}
                 <button
                   onClick={() => carouselRef.current?.next()}
-                  className="absolute right-0 bg-gray-800/70 hover:bg-gray-800 text-white p-2 rounded-full z-10 cursor-pointer"
+                  className="absolute right-0 bg-gray-800/70 hover:bg-gray-800 text-white p-2 rounded-full z-10 cursor-pointer mr-30"
                 >
                   <ChevronRight size={24} />
                 </button>
@@ -154,6 +155,7 @@ export default function HomePage() {
             ) : (
               <p className="text-gray-500 italic">No events found.</p>
             )}
+
 
             {/* Nút hành động */}
             {isLogin && (
