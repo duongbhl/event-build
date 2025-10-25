@@ -116,7 +116,7 @@ export const getTotalAttendeesLastMonth = async (req: any, res: Response) => {
     const userId = req.user.id;
     const now = new Date();
     const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(now.getMonth() - 1);
+    oneMonthAgo.setMonth(now.getMonth() - 3);
 
     const events = await Event.find({
       organizerId: userId,
@@ -140,7 +140,7 @@ export const getTotalRevenueLastMonth = async (req: any, res: Response) => {
     const userId = req.user.id;
     const now = new Date();
     const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(now.getMonth() - 1);
+    oneMonthAgo.setMonth(now.getMonth() - 3);
 
     const events = await Event.find({
       organizerId: userId,

@@ -108,8 +108,8 @@ const ViewDetails = () => {
             <h2 className="text-center font-bold text-lg">Countdown to {title}  </h2>
             <div className="flex justify-around mt-4">
               <div className="text-center">
-                <p className="text-3xl font-bold">{remainingDays}</p>
-                <p className="text-sm">Days</p>
+                <p className="text-3xl font-bold">{remainingDays > 0 ? (remainingDays): (<>End</>)}</p>
+                <p className="text-sm">{remainingDays > 0 ? ("days"): (<></>)}</p>
               </div>
             </div>
           </div>

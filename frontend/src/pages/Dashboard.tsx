@@ -103,7 +103,7 @@ const Dashboard = () => {
               <StatCard
                 title="Total Attendees"
                 value={<span className="text-2xl font-extrabold">{attendees}</span>}
-                hint="from last month"
+                hint="in last 3 months"
                 className="bg-gradient-to-r from-yellow-400 to-orange-500"
                 icon={<Users size={28} />}
               />
@@ -111,7 +111,7 @@ const Dashboard = () => {
               <StatCard
                 title="Revenue"
                 value={<span className="text-2xl font-extrabold">${revenue.toLocaleString()}</span>}
-                hint="from last month"
+                hint="in last 5 months"
                 className="bg-gradient-to-r from-emerald-400 to-green-500"
                 icon={<TrendingUp size={28} />}
               />
