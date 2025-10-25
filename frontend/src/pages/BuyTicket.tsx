@@ -2,14 +2,15 @@ import { Button } from '@/components/ui/button'
 import axios from 'axios'
 import { PlusCircle, Ticket } from 'lucide-react'
 import { useState } from 'react'
-import { useLocation } from 'react-router'
+import { useLocation, useParams } from 'react-router'
 
 const BuyTicket = () => {
-  const { title, _id } = useLocation().state || {}
+  const { _id,title } = useLocation().state || {}
   const [quantity, setQuantity] = useState(0);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const {id} =useParams()
 
   const buyTicket = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,7 +24,7 @@ const BuyTicket = () => {
       setLoading(true);
       const token = localStorage.getItem("token") || sessionStorage.getItem("token");
       const res = await axios.post("http://localhost:5000/api/user/tickets", {
-        eventId:_id, quantity
+        eventId:id, quantity
       }, {
         headers: {
           Authorization: `Bearer ${token}`,

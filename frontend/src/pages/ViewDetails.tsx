@@ -2,13 +2,14 @@ import { Button } from '@/components/ui/button'
 import axios from 'axios';
 import { BookOpen, Calendar, Check, CheckCircle, MapPin, TicketX, User, X } from 'lucide-react';
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 
 
 const ViewDetails = () => {
 
   //truyen tu Upcoming... vao day
   const { _id, title, date, expectedAttendees, attendees, location, description, price, status, source } = useLocation().state || {};
+  const { id } = useParams();
 
   const navigate = useNavigate();
   const eventDate = new Date(date);
@@ -76,8 +77,8 @@ const ViewDetails = () => {
 
 
   //Truyen tu day vao BuyTicket
-  const buyTicket = (_id: string) => {
-    navigate(`/BuyTicket/${_id}`, { state: { title, _id } });
+  const buyTicket = () => {
+    navigate(`/BuyTicket/${id}`, { state: { title, id } });
   }
 
   return (
@@ -104,7 +105,7 @@ const ViewDetails = () => {
 
           {/* Countdown */}
           <div className="bg-gradient-to-r from-sky-500 to-cyan-400 text-white rounded-2xl p-6 w-[500px] shadow-xl">
-            <h2 className="text-center font-bold text-lg">Countdown to {title}</h2>
+            <h2 className="text-center font-bold text-lg">Countdown to {title}  </h2>
             <div className="flex justify-around mt-4">
               <div className="text-center">
                 <p className="text-3xl font-bold">{remainingDays}</p>
@@ -133,7 +134,7 @@ const ViewDetails = () => {
             </p>
 
             {source === "explore" || source === "homepage" ? (
-              <Button className="mt-4 w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 rounded-xl transition cursor-pointer" onClick={() => buyTicket(_id)}>
+              <Button className="mt-4 w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 rounded-xl transition cursor-pointer" onClick={() => buyTicket()}>
                 Buy Ticket
               </Button>
             ) : source === "myEvents" ? (

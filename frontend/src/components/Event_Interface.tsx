@@ -1,5 +1,5 @@
 interface EventCardProps {
-    _id: number;
+    _id: string;
     title: string;
     date: string;
     location: string;

@@ -8,7 +8,7 @@ import type { EventCardProps } from './Event_Interface';
 const FeaturedEventCard: React.FC<EventCardProps> = ({ _id, title, date, location, expectedAttendees, price, description, source }) => {
     const navigate = useNavigate();
 
-    const handleViewDetails = (eventId: number, source: string) => {
+    const handleViewDetails = (eventId: string, source: string) => {
         navigate(`/ViewDetails/${eventId}`, {
             state: { title, date, location, expectedAttendees, price, description, source },
         });
