@@ -18,6 +18,7 @@ const sample = {
     { month: 'Apr', value: 280 },
     { month: 'May', value: 190 },
     { month: 'Jun', value: 240 },
+    { month: 'Jun', value: 240 },
   ],
   Attendees: [
     { month: 'Jan', value: 1200 },

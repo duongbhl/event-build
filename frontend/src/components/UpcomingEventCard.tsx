@@ -1,4 +1,4 @@
-import { Calendar, MapPin, Users } from 'lucide-react';
+import { Calendar, MapPin, StampIcon, Users } from 'lucide-react';
 import React from 'react';
 import { Button } from './ui/button';
 import { useNavigate } from 'react-router';
@@ -49,6 +49,9 @@ const UpcomingEventCard: React.FC<EventCardProps> = ({
         </p>
         <p className="flex items-center gap-2 text-sm">
           <Users size={16} /> {expectedAttendees} Attending
+        </p>
+        <p className="flex items-center gap-2 text-sm">
+          <StampIcon size={16} /> {status.toUpperCase()} 
         </p>
 
         <Button

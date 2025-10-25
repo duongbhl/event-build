@@ -7,19 +7,21 @@ const MyEvent = () => {
   const [events, setEvents] = useState<EventCardProps[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [filter, setFilter] = useState<"ALL" | "PENDING" | "APPROVED">("ALL");
   const eventsPerPage = 6;
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (filter === "ALL") fetchData();
+    else if (filter === "PENDING") fetchPending();
+    else if (filter === "APPROVED") fetchApproved();
+  }, [filter]);
 
+  // --- Fetch tất cả ---
   const fetchData = async () => {
     try {
       const token = localStorage.getItem("token") || sessionStorage.getItem("token");
       const res = await axios.get("http://localhost:5000/api/user/events", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setEvents(res.data.data);
     } catch (error) {
@@ -27,7 +29,34 @@ const MyEvent = () => {
     }
   };
 
-  // --- Lọc sự kiện theo từ khóa tìm kiếm ---
+  // --- Fetch pending ---
+  const fetchPending = async () => {
+    try {
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      const res = await axios.get("http://localhost:5000/api/user/events/pending", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setEvents(res.data.data);
+    } catch (error) {
+      console.log("ERROR fetching pending:", error);
+    }
+  };
+
+  
+  // --- Fetch approved ---
+  const fetchApproved = async () => {
+    try {
+      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      const res = await axios.get("http://localhost:5000/api/user/events/approved", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setEvents(res.data.data);
+    } catch (error) {
+      console.log("ERROR fetching approved:", error);
+    }
+  };
+
+  // --- Lọc theo từ khóa tìm kiếm ---
   const filteredEvents = useMemo(() => {
     return events.filter((event) =>
       (event.title || "").toLowerCase().includes(searchQuery.toLowerCase())
@@ -80,6 +109,25 @@ const MyEvent = () => {
             My Event List
           </h2>
 
+          {/* Bộ lọc trạng thái */}
+          <div className="flex justify-center gap-4 mb-8">
+            {["ALL", "PENDING", "APPROVED"].map((type) => (
+              <button
+                key={type}
+                onClick={() => {
+                  setFilter(type as "ALL" | "PENDING" | "APPROVED");
+                  setCurrentPage(1);
+                }}
+                className={`px-6 py-2 rounded-lg font-semibold border ${filter === type
+                    ? "bg-blue-400 text-white border-blue-400"
+                    : "bg-white text-gray-600 border-gray-300 hover:bg-gray-100"
+                  }`}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+
           {/* Ô tìm kiếm */}
           <div className="flex justify-center mb-10">
             <input
@@ -88,7 +136,7 @@ const MyEvent = () => {
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
-                setCurrentPage(1); // Reset về trang đầu khi tìm kiếm
+                setCurrentPage(1);
               }}
               className="w-96 px-4 py-3 rounded-xl bg-white/40 backdrop-blur-md border border-white/20 text-slate-900 placeholder-slate-500 focus:outline-none shadow-md slide-in-right"
               style={{ animationDelay: "160ms" }}
@@ -124,11 +172,10 @@ const MyEvent = () => {
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className={`px-4 py-2 rounded-lg ${
-                  currentPage === 1
+                className={`px-4 py-2 rounded-lg ${currentPage === 1
                     ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                     : "bg-blue-400 text-white hover:bg-blue-500"
-                }`}
+                  }`}
               >
                 Prev
               </button>
@@ -137,11 +184,10 @@ const MyEvent = () => {
                 <button
                   key={i}
                   onClick={() => handlePageChange(i + 1)}
-                  className={`px-4 py-2 rounded-lg ${
-                    currentPage === i + 1
+                  className={`px-4 py-2 rounded-lg ${currentPage === i + 1
                       ? "bg-blue-400 text-white font-bold"
                       : "bg-gray-100 hover:bg-gray-200"
-                  }`}
+                    }`}
                 >
                   {i + 1}
                 </button>
@@ -150,11 +196,10 @@ const MyEvent = () => {
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className={`px-4 py-2 rounded-lg ${
-                  currentPage === totalPages
+                className={`px-4 py-2 rounded-lg ${currentPage === totalPages
                     ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                     : "bg-blue-400 text-white hover:bg-blue-500"
-                }`}
+                  }`}
               >
                 Next
               </button>

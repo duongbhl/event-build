@@ -103,9 +103,9 @@ export const Header = () => {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent className="bg-[#1e2633] text-white border border-gray-700">
-                <DropdownMenuItem className="hover:bg-blue-200 focus:bg-blue-400 focus:text-white cursor-pointer">
+                {/* <DropdownMenuItem className="hover:bg-blue-200 focus:bg-blue-400 focus:text-white cursor-pointer">
                   <a href="/Analytics">Analytics</a>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 <DropdownMenuItem className="hover:bg-blue-200 focus:bg-blue-400 focus:text-white cursor-pointer">
                   <a href="/Networking">Networking</a>
                 </DropdownMenuItem>

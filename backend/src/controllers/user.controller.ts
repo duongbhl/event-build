@@ -65,6 +65,101 @@ export const getAllApprovalEvent = async (req: any, res: Response) => {
   }
 };
 
+// --- THỐNG KÊ ---
+// 1️⃣ Tổng số sự kiện đã được approved trong 5 tháng trước
+export const getApprovedEventsLast5Months = async (req: any, res: Response) => {
+  try {
+    const userId = req.user.id;
+    const now = new Date();
+    const fiveMonthsAgo = new Date();
+    fiveMonthsAgo.setMonth(now.getMonth() - 5);
+
+    const count = await Event.countDocuments({
+      organizerId: userId,
+      status: "approved",
+      date: { $gte: fiveMonthsAgo, $lte: now },
+    });
+
+    res.status(200).json({ message: "Approved events in last 5 months", total: count });
+  } catch (error) {
+    console.error("Error in getApprovedEventsLast5Months:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+
+// 2️⃣ Tổng số sự kiện đã được approved trong 3 tháng tới
+export const getApprovedEventsNext3Months = async (req: any, res: Response) => {
+  try {
+    const userId = req.user.id;
+    const now = new Date();
+    const threeMonthsLater = new Date();
+    threeMonthsLater.setMonth(now.getMonth() + 3);
+
+    const count = await Event.countDocuments({
+      organizerId: userId,
+      status: "approved",
+      date: { $gte: now, $lte: threeMonthsLater },
+    });
+
+    res.status(200).json({ message: "Approved events in next 3 months", total: count });
+  } catch (error) {
+    console.error("Error in getApprovedEventsNext3Months:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+
+// 3️⃣ Tổng attendees của các sự kiện trong 1 tháng trước
+export const getTotalAttendeesLastMonth = async (req: any, res: Response) => {
+  try {
+    const userId = req.user.id;
+    const now = new Date();
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(now.getMonth() - 1);
+
+    const events = await Event.find({
+      organizerId: userId,
+      status: "approved",
+      date: { $gte: oneMonthAgo, $lte: now },
+    });
+
+    const totalAttendees = events.reduce((sum, e) => sum + (e.attendees || 0), 0);
+
+    res.status(200).json({ message: "Total attendees in last month", totalAttendees });
+  } catch (error) {
+    console.error("Error in getTotalAttendeesLastMonth:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+
+// 4️⃣ Tổng thu nhập của các sự kiện trong 1 tháng trước
+export const getTotalRevenueLastMonth = async (req: any, res: Response) => {
+  try {
+    const userId = req.user.id;
+    const now = new Date();
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(now.getMonth() - 1);
+
+    const events = await Event.find({
+      organizerId: userId,
+      status: "approved",
+      date: { $gte: oneMonthAgo, $lte: now },
+    });
+
+    const totalRevenue = events.reduce((sum, e) => sum + (e.attendees || 0) * (e.price || 0), 0);
+
+    res.status(200).json({ message: "Total revenue in last month", totalRevenue });
+  } catch (error) {
+    console.error("Error in getTotalRevenueLastMonth:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+
+
+
 
 //lay event cua tat ca moi nguoi tru cua minh (approved)
 export const getEvents = async (req: any, res: Response) => {

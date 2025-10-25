@@ -4,6 +4,7 @@ import { Calendar, DollarSign, FileText, MapPin, PlusCircle, Users } from 'lucid
 import React, { useState } from 'react'
 
 const Create = () => {
+
   const [title, setTitle] = useState('')
   const [date, setDate] = useState('')
   const [location, setLocation] = useState('')
@@ -14,6 +15,18 @@ const Create = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+
+  function isValidDateDMY(dateStr: string) {
+    const [day, month, year] = dateStr.split('/').map(Number);
+    const date = new Date(year, month - 1, day);
+
+    return (
+      date.getFullYear() === year &&
+      date.getMonth() + 1 === month &&
+      date.getDate() === day
+    );
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setMessage(null);
@@ -23,7 +36,8 @@ const Create = () => {
     }
     const eventDate = new Date(date);
     const now = new Date()
-    if (eventDate.getDate() <= now.getDate()) {
+    
+    if (eventDate.getDay() <= now.getDay() && eventDate.getMonth() <= now.getMonth() && eventDate.getFullYear() <= now.getFullYear()) {
       setError("Choose another Day");
 
     } else {

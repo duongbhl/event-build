@@ -90,7 +90,7 @@ export default function HomePage() {
             </h1>
 
             {/* Search box */}
-            <div className="flex justify-center mb-10">
+            <div className="flex justify-center">
               <input
                 type="text"
                 placeholder="Search events..."
@@ -127,7 +127,7 @@ export default function HomePage() {
                   itemClass="w-full flex justify-center"
                 >
                   {filteredEvents.map((event) => (
-                    <div key={event._id} className="flex justify-center w-full mt-20">
+                    <div key={event._id} className="flex justify-center w-full mt-10">
                       <FeaturedEventCard
                         _id={event._id}
                         title={event.title}

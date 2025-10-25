@@ -8,6 +8,7 @@ const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 4;
+  
 
   useEffect(() => {
     fetchData();

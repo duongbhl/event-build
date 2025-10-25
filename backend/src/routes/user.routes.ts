@@ -9,6 +9,10 @@ import {
   cancelTicket,
   getTicketById,
   getEvents,
+  getApprovedEventsLast5Months,
+  getApprovedEventsNext3Months,
+  getTotalAttendeesLastMonth,
+  getTotalRevenueLastMonth,
 } from "../controllers/user.controller";
 
 export const userRouter = Router();
@@ -24,10 +28,15 @@ userRouter.post("/event", protect, createEvent);//xong
 userRouter.get("/events", protect, getAllEvent);//xong
 
 // 👉 Xem danh sách sự kiện chưa được duyệt (chỉ organizer thấy)
-userRouter.get("/events/pending", getAllPendingEvent);//xong
+userRouter.get("/events/pending",protect, getAllPendingEvent);//xong
 
 // 👉 Xem danh sách sự kiện đã được duyệt (tất cả user đều thấy)
-userRouter.get("/events/approved", getAllApprovalEvent);//xong
+userRouter.get("/events/approved",protect,getAllApprovalEvent);//xong
+
+userRouter.get("/stats/approved-last-5-months", protect, getApprovedEventsLast5Months);
+userRouter.get("/stats/approved-next-3-months", protect, getApprovedEventsNext3Months);
+userRouter.get("/stats/attendees-last-month", protect, getTotalAttendeesLastMonth);
+userRouter.get("/stats/revenue-last-month", protect, getTotalRevenueLastMonth);
 
 //su kien cua ng khac da dc approved
 userRouter.get("/allEvents/approved",protect,getEvents);
