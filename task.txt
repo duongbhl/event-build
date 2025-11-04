@@ -1,4 +1,3 @@
 
-user:
-   analytics: fetch filter(revenue, attendees, satisfication)
    
+finish
